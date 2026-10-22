@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090a0c">
+  <title>Printer Job Scheduling | Circular Queue</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="masthead">
+      <div class="title-stack">
+        <h1>Printer Job Scheduling</h1>
+        <h2>Circular Queue</h2>
+      </div>
+      <div class="header-chip"><span class="live-dot"></span> Dynamic buffer</div>
+    </header>
+
+    <main class="workspace">
+      <section class="card visual-card" aria-labelledby="visualizerTitle">
+        <div class="card-heading">
+          <div>
+            <p class="section-kicker">LIVE VIEW</p>
+            <h3 id="visualizerTitle">Queue visualizer</h3>
+            <p class="heading-description">Follow the Front and Rear pointers around the circular buffer.</p>
+          </div>
+          <div class="capacity-chip" id="bufferStatus">4 slots allocated</div>
+        </div>
+
+        <div class="visual-content">
+          <div class="ring-board" id="ringBoard" role="img" aria-label="Circular queue visualization">
+            <div class="ring-outline" aria-hidden="true"></div>
+            <div class="center-label">
+              <span class="center-caption">JOBS QUEUED</span>
+              <strong class="center-count" id="countCenter">0</strong>
+              <span class="center-capacity" id="capacityCenter">Slots allocated: 4</span>
+            </div>
+          </div>
+
+          <div class="legend" aria-label="Diagram legend">
+            <span><i class="legend-dot front-dot"></i>Front · next to print</span>
+            <span><i class="legend-dot rear-dot"></i>Rear · last added</span>
+            <span><i class="legend-dot empty-dot"></i>Empty slot</span>
+          </div>
+
+          <section class="queue-table-card" aria-labelledby="jobTableTitle">
+            <div class="table-heading">
+              <div>
+                <h4 id="jobTableTitle">Queued printer jobs</h4>
+                <p>Front → Rear · First in, first out (FIFO)</p>
+              </div>
+              <span class="queue-count" id="jobListSummary">0 jobs</span>
+            </div>
+            <div class="table-scroll" aria-label="All queued printer jobs">
+              <table class="job-table">
+                <thead><tr><th scope="col">FIFO #</th><th scope="col">Slot</th><th scope="col">Job name</th><th scope="col">Pointer</th></tr></thead>
+                <tbody id="jobTableBody"><tr><td colspan="4" class="empty-row">Queue is empty.</td></tr></tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <aside class="card operations-card" aria-labelledby="operationsTitle">
+        <div class="card-heading compact-heading">
+          <div>
+            <p class="section-kicker">CONTROL DESK</p>
+            <h3 id="operationsTitle">Queue operations</h3>
+            <p class="heading-description">Add, inspect, and process print jobs.</p>
+          </div>
+        </div>
+
+        <div class="control-content">
+          <form id="enqueueForm" class="enqueue-form">
+            <label for="jobInput">New printer job</label>
+            <div class="entry-row">
+              <input id="jobInput" name="job" maxlength="200" placeholder="e.g., Print report.pdf" autocomplete="off">
+              <button id="enqueueBtn" class="button button-primary" type="submit">Enqueue <span aria-hidden="true">＋</span></button>
+            </div>
+          </form>
+
+          <div class="action-grid" aria-label="Queue actions">
+            <button class="button action-button" id="dequeueBtn" type="button"><span class="action-title">Dequeue</span><span class="action-help">Remove next job</span></button>
+            <button class="button action-button action-process" id="processBtn" type="button"><span class="action-title">Process Job</span><span class="action-help">Simulate printing</span></button>
+            <button class="button action-button" id="peekFrontBtn" type="button"><span class="action-title">Peek Front</span><span class="action-help">See next job</span></button>
+            <button class="button action-button" id="peekRearBtn" type="button"><span class="action-title">Peek Rear</span><span class="action-help">See last job</span></button>
+            <button class="button action-button" id="sizeBtn" type="button"><span class="action-title">Get Size</span><span class="action-help">Count waiting jobs</span></button>
+            <button class="button action-button" id="emptyBtn" type="button"><span class="action-title">Is Empty?</span><span class="action-help">Check queue state</span></button>
+            <button class="button action-button action-wide" id="displayBtn" type="button"><span class="action-title">Display Queue</span><span class="action-help">Show the full FIFO order</span></button>
+            <button class="button button-clear action-wide" id="clearBtn" type="button"><span class="action-title">Clear Queue</span><span class="action-help">Remove all waiting jobs</span></button>
+          </div>
+
+          <div class="status-box neutral" id="status" role="status" aria-live="polite">Ready. Add a printer job to begin.</div>
+
+          <section class="processed-card" aria-live="polite" aria-label="Processing summary">
+            <div class="processed-number"><span>Jobs processed</span><strong id="processedCount">0</strong></div>
+            <div class="last-processed" id="lastProcessed">No jobs processed yet.</div>
+          </section>
+
+          <section class="fifo-card" aria-labelledby="fifoTitle">
+            <h4 id="fifoTitle">Logical FIFO order <span>Front → Rear</span></h4>
+            <div class="orderline" id="orderLine"><span class="empty-order">Queue is empty.</span></div>
+          </section>
+
+          <section class="history-section" aria-labelledby="historyTitle">
+            <div class="history-heading">
+              <div><h4 id="historyTitle">Operation history</h4><p>Most recent actions first</p></div>
+              <button id="clearLogBtn" class="button clear-history" type="button">Clear history</button>
+            </div>
+            <div class="history-list" id="logList"><div class="history-empty">No operations yet.</div></div>
+          </section>
+        </div>
+      </aside>
+    </main>
+    <footer class="page-footer">Printer Job Scheduling <span>•</span> Circular Queue Demonstration</footer>
+  </div>
+</body>
+</html>
